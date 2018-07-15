@@ -1,0 +1,8 @@
+## Interface: 70300
+## Title: Tango-UI |cff69ccf0Allo les amis|r  <3
+## Author: Tango
+## Version: 0.2
+## Notes: je fait des choses
+## DefaultState: enabled
+
+main.lua
