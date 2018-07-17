@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-## Interface: 70300
+## Interface: 80000
 ## Title: Tango-UI |cff69ccf0Allo les amis|r  <3
 ## Author: Tango
 ## Version: 0.3
 ## Notes: je fait des choses
 ## DefaultState: enabled
 
-=======
-## Interface: 70300
-## Title: Tango-UI |cff69ccf0Allo les amis|r  <3
-## Author: Tango
-## Version: 0.2
-## Notes: je fait des choses
-## DefaultState: enabled
 
->>>>>>> a44181cb84c7370c4886a90456e1ca1b7f149113
 main.lua
