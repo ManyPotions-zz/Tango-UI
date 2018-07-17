@@ -11,11 +11,11 @@ powerColor = {
 	{"1","1","0","0"}, -- rage
 	{"2","1","0.5","0.25"}, -- focus
 	{"3","1","1","0"}, -- energy
-	{"4","0","0.96","0.41"}, -- combo point
+	{"4","1","0.96","0.41"}, -- combo point
 	{"5","0.5","0.5","0.5"}, -- Runes
 	{"6","0","0.82","1"}, -- Runic Power
 	{"7","0.5","0.32","0.55"}, -- soul shards
-	{"8","0.3","0.52","0.9"}, -- lunar power
+	{"8","0.3","0.52","0.9"}, -- lunar/astral power
 	{"9","0.95","0.90","0.60"}, -- holy power
 	{"10","0","0.5","1"}, -- Alternate power (i think its not use)
 	{"11","0","0.5","1"}, -- maelstrom
@@ -29,12 +29,167 @@ powerColor = {
     }
 
 
-
-
-
+	
 --------------------------------------------------------------------------------------------------------------
 -- General fonction
 --------------------------------------------------------------------------------------------------------------
+local function isempty(s)
+  return s == nil or s == ''
+end
+
+--getting basic information
+playerClass = UnitClass("player")
+playerCurrentSpec =  GetSpecialization()
+--print (playerCurrentSpec)
+
+--Function pour definir les value qui on besoin d'etre mise a jours a PLAYER_ENTERING_WORLD
+local function setAddonDefault(self,elapsed)
+	
+	--Getting player powertype information for Druid	
+	if playerClass == "Druid" then	
+		local playerForm = GetShapeshiftForm("player")
+		if playerForm == 0 then
+			--print "Humanoid"			
+			playerMainPowerType = 0
+			local powerIndex = powerColor[1]			
+			mainPowerColorR = powerIndex[2]
+			mainPowerColorG = powerIndex[3]
+			mainPowerColorB = powerIndex[4]	
+			local powerIndex2 = powerColor[5]
+			--Humanoid form dont have secondary power
+			secondaryPowerType = nil
+		
+		elseif playerForm == 1 then
+			--print "bear"			
+			playerMainPowerType = 1
+			local powerIndex = powerColor[2]			
+			mainPowerColorR = powerIndex[2]
+			mainPowerColorG = powerIndex[3]
+			mainPowerColorB = powerIndex[4]	
+			local powerIndex2 = powerColor[5]
+			--Bear form dont have secondary power
+			secondaryPowerType = nil
+
+		elseif playerForm == 2 then
+			--print "cat"
+			playerMainPowerType = 3
+			local powerIndex = powerColor[4]			
+			mainPowerColorR = powerIndex[2]
+			mainPowerColorG = powerIndex[3]
+			mainPowerColorB = powerIndex[4]	
+			secondaryPowerType = 4
+			local powerIndex2 = powerColor[5]		
+			secondaryPowerColorR = powerIndex2[2]
+			secondaryPowerColorG = powerIndex2[3]
+			secondaryPowerColorB = powerIndex2[4]
+					
+		elseif playerForm == 3 then
+			--print "travel"
+			playerMainPowerType = 0
+			local powerIndex = powerColor[1]			
+			mainPowerColorR = powerIndex[2]
+			mainPowerColorG = powerIndex[3]
+			mainPowerColorB = powerIndex[4]	
+			local powerIndex2 = powerColor[5]
+			--travel form dont have secondary power
+			secondaryPowerType = nil
+			
+		elseif playerForm == 4 then
+			--print "Mookin"
+			playerMainPowerType = 8
+			local powerIndex = powerColor[9]			
+			mainPowerColorR = powerIndex[2]
+			mainPowerColorG = powerIndex[3]
+			mainPowerColorB = powerIndex[4]	
+			secondaryPowerType = 0
+			local powerIndex2 = powerColor[1]			
+			secondaryPowerColorR = powerIndex2[2]
+			secondaryPowerColorG = powerIndex2[3]
+			secondaryPowerColorB = powerIndex2[4]		
+		else 
+			--print "tree/stag"
+			playerMainPowerType = 0
+			local powerIndex = powerColor[1]			
+			mainPowerColorR = powerIndex[2]
+			mainPowerColorG = powerIndex[3]
+			mainPowerColorB = powerIndex[4]	
+			local powerIndex2 = powerColor[5]
+			--tree/stag form dont have secondary power
+			secondaryPowerType = nil		
+		end
+		--print (secondaryPowerType)
+	elseif playerClass == "Demon Hunter" and playerCurrentSpec == 2 then
+	--print ("this is a Vengeance Demon Hunter")
+		playerMainPowerType = 18
+		local powerIndex = powerColor[19]			
+		mainPowerColorR = powerIndex[2]
+		mainPowerColorG = powerIndex[3]
+		mainPowerColorB = powerIndex[4]	
+		local powerIndex2 = powerColor[5]
+		--tree/stag form dont have secondary power
+		secondaryPowerType = nil		
+	else
+	--Getting Mainpower information
+	mainPower = {"0", "1", "2", "3", "5", "12", "17", "18"}
+	for  i = 1, 8 do
+	local pm = UnitPowerMax("player",mainPower[i])	
+	local pt = mainPower[i]	
+		if pm > 0  then
+			playerMainPowerType = pt			
+			break
+	   end
+	end
+	--Getting bar color for mainpower 
+
+	for i = 1, 18 do
+	local powerIndex = powerColor[i]
+	local colorIndex = powerIndex[1]
+		if colorIndex == playerMainPowerType then
+		mainPowerColorR = powerIndex[2]
+		mainPowerColorG = powerIndex[3]
+		mainPowerColorB = powerIndex[4]
+		end
+	end
+	
+	--Getting secondaryPower information
+	secondaryPower = {"4", "6", "7", "8", "9", "11", "13", "16"}
+	for  i = 1, 8 do
+	local pm = UnitPowerMax("player",secondaryPower[i])	
+	local pt = secondaryPower[i]	
+		if pm > 0  then
+			secondaryPowerType = pt
+			break
+	   else
+			--this class dont have secondary power
+			secondaryPowerType = nil	
+	   end
+	end
+
+	--Getting bar color for secondaryPower 
+	for i = 1, 18 do
+	 colorIndex = powerColor[i]
+	 powerIndex = colorIndex[1]
+		if powerIndex == secondaryPowerType then
+		secondaryPowerColorR = colorIndex[2]
+		secondaryPowerColorG = colorIndex[3]
+		secondaryPowerColorB = colorIndex[4]	
+		break
+		end
+	end		
+	
+
+	--test On uptate Event
+	print ("Its is working?")
+	end	
+end
+
+--exectution de la function setAddonDefault
+local addonDefaultFrame = CreateFrame("frame")
+addonDefaultFrame:RegisterEvent("PLAYER_ENTERING_WORLD"); 
+addonDefaultFrame:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
+--addonDefaultFrame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED"); --je sais pas pourquois mon event ne trigger pas.
+addonDefaultFrame:SetScript("OnEvent", setAddonDefault);
+
 --Trasforme les chiffre trop gros en chirffre lisible
 local function ReadableNumber(num, places)
     local ret
@@ -62,59 +217,6 @@ local function ReadableNumber(num, places)
     return ret
 end
 
---Getting player powertype information
-
---Getting Mainpower information
-mainPower = {"0", "1", "2", "3", "5", "12", "17", "18"}
-for  i = 1, 8 do
-local pm = UnitPowerMax("player",mainPower[i])	
-local pt = mainPower[i]	
-	if pm > 0  then
-		playerMainPowerType = pt
-		break
-   end
-end
---Getting bar color for mainpower 
-
-
-for i = 1, 18 do
-local powerIndex = powerColor[i]
-local colorIndex = powerIndex[1]
-	if colorIndex == playerMainPowerType then
-	mainPowerColorR = powerIndex[2]
-	mainPowerColorG = powerIndex[3]
-	mainPowerColorB = powerIndex[4]
-	end
-
-	
-end
-
---Getting secondaryPower information
-secondaryPower = {"4", "6", "7", "8", "9", "11", "13", "16"}
-for  i = 1, 8 do
-local pm = UnitPowerMax("player",secondaryPower[i])	
-local pt = secondaryPower[i]	
-	if pm > 0  then
-		secondaryPowerType = pt
-		--print (secondaryPowerType)
-		break
-   end
-end
-
---Getting bar color for secondaryPower 
-for i = 1, 18 do
-local colorIndex = powerColor[i]
-local powerIndex = colorIndex[1]
-	if powerIndex == secondaryPowerType then
-	secondaryPowerColorR = colorIndex[2]
-	secondaryPowerColorG = colorIndex[3]
-	secondaryPowerColorB = colorIndex[4]
-	print (mainPowerColorR)
-	print (mainPowerColorG) 
-	print (mainPowerColorB) 	
-	break
-	end
-end
 --------------------------------------------------------------------------------------------------------------
 -- player healt bar
 --------------------------------------------------------------------------------------------------------------
@@ -167,7 +269,7 @@ pPowerBar:SetPoint("CENTER",-300,-20)
 pPowerBar:SetSize(150,10)
 pPowerBar:Show()
 pPowerBar:SetValue(100)
-pPowerBar:SetStatusBarColor(mainPowerColorR,mainPowerColorG,mainPowerColorB)
+--pPowerBar:SetStatusBarColor(mainPowerColorR,mainPowerColorG,mainPowerColorB)
 pPowerBar.text = pPowerBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 pPowerBar.text:SetAllPoints()
 
@@ -187,7 +289,7 @@ pPowerBarBg:SetBackdropColor(0,0,0,1);
 pPowerBar:SetScript("OnUpdate",function(self) 
 self:SetValue(UnitPower("player",playerMainPowerType)/UnitPowerMax("player",playerMainPowerType)*100) 
 
-
+self:SetStatusBarColor(mainPowerColorR,mainPowerColorG,mainPowerColorB)
 end)
 
 --------------------------------------------------------------------------------------------------------------
@@ -200,18 +302,18 @@ playerPowerBar2:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
 local pPowerBar2 = playerPowerBar2
 pPowerBar2.unit = "player"
 pPowerBar2:SetMinMaxValues(0,100)
-pPowerBar2:SetPoint("CENTER",-300,-40)
+pPowerBar2:SetPoint("CENTER",-300,-35)
 pPowerBar2:SetSize(150,10)
 pPowerBar2:Show()
 pPowerBar2:SetValue(100)
-pPowerBar2:SetStatusBarColor(secondaryPowerColorR,secondaryPowerColorG,secondaryPowerColorB)
+--pPowerBar2:SetStatusBarColor(secondaryPowerColorR,secondaryPowerColorG,secondaryPowerColorB)
 pPowerBar2.text = pPowerBar2:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 pPowerBar2.text:SetAllPoints()
 
 --Drawing  Background and border under the secondary /Power Bar
 playerPowerBar2Bg = CreateFrame("Statusbar",BORDER,UIParent)
 local pPowerBar2Bg = playerPowerBar2Bg
-pPowerBar2Bg:SetPoint("CENTER",-300,-40)
+pPowerBar2Bg:SetPoint("CENTER",-300,-35)
 pPowerBar2Bg:SetSize(160,20)
 pPowerBar2Bg:Show()
 pPowerBar2Bg:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
@@ -221,11 +323,23 @@ pPowerBar2Bg:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background",
 pPowerBar2Bg:SetBackdropColor(0,0,0,1);
 
 --Run Script uptade a l'event OnUpdate (chaque Frame).
+
+
+
 pPowerBar2:SetScript("OnUpdate",function(self) 
-self:SetValue(UnitPower("player",secondaryPowerType)/UnitPowerMax("player",secondaryPowerType)*100) 
-
-
+	if (secondaryPowerType == nil ) then
+		--pPowerBar2:Hide()
+		pPowerBar2Bg:Hide()
+		pPowerBar2:SetValue(0)
+		
+	else
+	pPowerBar2Bg:Show()
+		self:SetValue(UnitPower("player",secondaryPowerType)/UnitPowerMax("player",secondaryPowerType)*100) 
+		self:SetStatusBarColor(secondaryPowerColorR,secondaryPowerColorG,secondaryPowerColorB)
+		
+	end
 end)
+
 
 --------------------------------------------------------------------------------------------------------------
 -- Target tStatusbar
@@ -299,18 +413,6 @@ end)
 --------------------------------------------------------------------------------------------------------------
 -- temp code a
 --------------------------------------------------------------------------------------------------------------
---main power 0,1,2,3,5,12,17,18
---secondary 6,7,8,9,13,14,15
-
-
-
-
-
-
-
-
-
-
 
 
 
