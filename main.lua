@@ -179,7 +179,7 @@ local function setAddonDefault(self,elapsed)
 	
 
 	--test On uptate Event
-	print ("Its is working?")
+	--print ("Its is working?")
 	end	
 end
 
@@ -408,8 +408,36 @@ tStatusbar:SetScript("OnUpdate",function(self)
 	end
 
 end)		
+--------------------------------------------------------------------------------------------------------------
+-- Afflication Warlock Debuff
+--------------------------------------------------------------------------------------------------------------
+local buffs = {
+    ["Battle Shout"] = true,
+    ["Blessing of Kings"] = true,
+    ["Horn of Winter"] = true,
+    ["Mark of the Wild"] = true,
+    ["Well Fed"] = true,
+}
+ 
 
+corruptionFrame = CreateFrame("Statusbar",nil,UIParent)
+corruptionFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local corruptionBar = corruptionFrame
+corruptionBar.unit = target
+corruptionBar:SetMinMaxValues(0,100)
+corruptionBar:SetPoint("CENTER",300,20)
+corruptionBar:SetSize(150,10)
+corruptionBar:Show()
+corruptionBar:SetValue(100)
+corruptionBar:SetStatusBarColor(1,0.1,0.1, 1)
+corruptionBar.text = corruptionBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
+corruptionBar.text:SetAllPoints()
 
+--exectution de la function setWarlockUi
+corruptionBar:RegisterEvent("UNIT_AURA")
+corruptionBar:SetScript("OnEvent", function(self, event, ...)
+--print ("test hello")
+end)
 --------------------------------------------------------------------------------------------------------------
 -- temp code a
 --------------------------------------------------------------------------------------------------------------
