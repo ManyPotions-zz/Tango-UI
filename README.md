@@ -6,7 +6,8 @@
 
 
 ## ToDo / User requested features:
-adding Warlock curse over target bar
+adding Warlock curse over target bar.
+
 fixing status bar on;
 - [x] Warrior
 - [x] Paladin
