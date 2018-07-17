@@ -2,7 +2,7 @@
 ###### Interface addon for World of Warcraft.
 
 ## Features
-this addon is move Player/targe life and resouce in middle of screen. 
+ Tango-UI is an add-on for monitoring players Life and power,
 
 
 ## ToDo / User requested features:
