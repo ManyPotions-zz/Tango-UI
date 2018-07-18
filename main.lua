@@ -418,7 +418,7 @@ tStatusbar:SetScript("OnUpdate",function(self)
 
 end)		
 --------------------------------------------------------------------------------------------------------------
--- Afflication Warlock Debuff
+-- Afflication Warlock Debuff -- 
 --------------------------------------------------------------------------------------------------------------
 local buffs = {
     ["Battle Shout"] = true,
@@ -437,7 +437,7 @@ corruptionBar:SetMinMaxValues(0,100)
 corruptionBar:SetPoint("CENTER",300,20)
 corruptionBar:SetSize(150,10)
 corruptionBar:Show()
-corruptionBar:SetValue(100)
+corruptionBar:SetValue(0)
 corruptionBar:SetStatusBarColor(1,0.1,0.1, 1)
 corruptionBar.text = corruptionBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 corruptionBar.text:SetAllPoints()
@@ -447,7 +447,7 @@ corruptionBar:RegisterEvent("UNIT_AURA")
 corruptionBar:SetScript("OnEvent", function(self, event, ...)
 --expirationTime -> Number - Time at which the debuff expires (GetTime() as a reference frame).
 local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3  = UnitDebuff("target",1)
-print (GetTime(expirationTime))
+--print (GetTime(expirationTime))
 
 end)
 
