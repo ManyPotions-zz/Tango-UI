@@ -7,14 +7,14 @@ print("Hello " .. UnitName("player"));
 
 --Array for Color by power
 powerColor = {
-    {"0","0","0","1"}, -- mana
+    {"0","0.39","0.62","1"}, -- mana
 	{"1","1","0","0"}, -- rage
 	{"2","1","0.5","0.25"}, -- focus
 	{"3","1","1","0"}, -- energy
 	{"4","1","0.96","0.41"}, -- combo point
 	{"5","0.5","0.5","0.5"}, -- Runes
 	{"6","0","0.82","1"}, -- Runic Power
-	{"7","0.5","0.32","0.55"}, -- soul shards
+	{"7","0.96","0.39","0.83"}, -- soul shards
 	{"8","0.3","0.52","0.9"}, -- lunar/astral power
 	{"9","0.95","0.90","0.60"}, -- holy power
 	{"10","0","0.5","1"}, -- Alternate power (i think its not use)
@@ -118,8 +118,8 @@ local function setAddonDefault(self,elapsed)
 			secondaryPowerType = nil		
 		end
 		--print (secondaryPowerType)
-	elseif playerClass == "Demon Hunter" and playerCurrentSpec == 2 then
-	--print ("this is a Vengeance Demon Hunter")
+		elseif playerClass == "Demon Hunter" and playerCurrentSpec == 2 then
+		--print ("this is a Vengeance Demon Hunter")
 		playerMainPowerType = 18
 		local powerIndex = powerColor[19]			
 		mainPowerColorR = powerIndex[2]
@@ -128,59 +128,56 @@ local function setAddonDefault(self,elapsed)
 		local powerIndex2 = powerColor[5]
 		--tree/stag form dont have secondary power
 		secondaryPowerType = nil		
-	else
-	--Getting Mainpower information
-	mainPower = {"0", "1", "2", "3", "5", "12", "17", "18"}
-	for  i = 1, 8 do
-	local pm = UnitPowerMax("player",mainPower[i])	
-	local pt = mainPower[i]	
-		if pm > 0  then
-			playerMainPowerType = pt			
-			break
-	   end
-	end
-	--Getting bar color for mainpower 
-
-	for i = 1, 18 do
-	local powerIndex = powerColor[i]
-	local colorIndex = powerIndex[1]
-		if colorIndex == playerMainPowerType then
-		mainPowerColorR = powerIndex[2]
-		mainPowerColorG = powerIndex[3]
-		mainPowerColorB = powerIndex[4]
+		else
+		--Getting Mainpower information
+		mainPower = {"0", "1", "2", "3", "5", "12", "17", "18"}
+		for  i = 1, 8 do
+			local pm = UnitPowerMax("player",mainPower[i])	
+			local pt = mainPower[i]	
+			if pm > 0  then
+				playerMainPowerType = pt			
+				break
+			end
 		end
-	end
-	
-	--Getting secondaryPower information
-	secondaryPower = {"4", "6", "7", "8", "9", "11", "13", "16"}
-	for  i = 1, 8 do
-	local pm = UnitPowerMax("player",secondaryPower[i])	
-	local pt = secondaryPower[i]	
-		if pm > 0  then
-			secondaryPowerType = pt
-			break
-	   else
-			--this class dont have secondary power
-			secondaryPowerType = nil	
-	   end
-	end
+		--Getting bar color for mainpower 
 
-	--Getting bar color for secondaryPower 
-	for i = 1, 18 do
-	 colorIndex = powerColor[i]
-	 powerIndex = colorIndex[1]
-		if powerIndex == secondaryPowerType then
-		secondaryPowerColorR = colorIndex[2]
-		secondaryPowerColorG = colorIndex[3]
-		secondaryPowerColorB = colorIndex[4]	
-		break
+		for i = 1, 18 do
+		local powerIndex = powerColor[i]
+		local colorIndex = powerIndex[1]
+			if colorIndex == playerMainPowerType then
+			mainPowerColorR = powerIndex[2]
+			mainPowerColorG = powerIndex[3]
+			mainPowerColorB = powerIndex[4]
+			end
 		end
-	end		
 	
+		--Getting secondaryPower information
+		secondaryPower = {"4", "6", "7", "8", "9", "11", "13", "16"}
+		for  i = 1, 8 do
+		local pm = UnitPowerMax("player",secondaryPower[i])	
+		local pt = secondaryPower[i]	
+			if pm > 0  then
+				secondaryPowerType = pt
+				break
+		   else
+				--this class dont have secondary power
+				secondaryPowerType = nil	
+		   end
+		end
 
-	--test On uptate Event
-	--print ("Its is working?")
+		--Getting bar color for secondaryPower 
+		for i = 1, 18 do
+		 colorIndex = powerColor[i]
+		 powerIndex = colorIndex[1]
+			if powerIndex == secondaryPowerType then
+			secondaryPowerColorR = colorIndex[2]
+			secondaryPowerColorG = colorIndex[3]
+			secondaryPowerColorB = colorIndex[4]	
+			break
+			end
+		end		
 	end	
+
 end
 
 --exectution de la function setAddonDefault
@@ -228,8 +225,8 @@ playerHealthBar:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
 local pStatusbar = playerHealthBar
 pStatusbar.unit = pUnit
 pStatusbar:SetMinMaxValues(0,100)
-pStatusbar:SetPoint("CENTER",-300,0)
-pStatusbar:SetSize(150,20)
+pStatusbar:SetPoint("CENTER",-300,-246)
+pStatusbar:SetSize(200,14)
 pStatusbar:Show()
 pStatusbar:SetValue(100)
 pStatusbar:SetStatusBarColor(0,1,0, 1)
@@ -239,8 +236,8 @@ pStatusbar.text:SetAllPoints()
 --Drawing  Background and border under the healt Bar
 playerHealthBarBg = CreateFrame("Statusbar",BORDER,UIParent)
 local pStatusbarBg = playerHealthBarBg
-pStatusbarBg:SetPoint("CENTER",-300,0)
-pStatusbarBg:SetSize(160,30)
+pStatusbarBg:SetPoint("CENTER",-300,-250)
+pStatusbarBg:SetSize(208,30)
 pStatusbarBg:Show()
 pStatusbarBg:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
                                             edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
@@ -250,9 +247,15 @@ pStatusbarBg:SetBackdropColor(0,0,0,1);
 
 --Run Script uptade a l'event OnUpdate (chaque Frame).
 pStatusbar:SetScript("OnUpdate",function(self) 
-self:SetValue(UnitHealth(self.unit)/UnitHealthMax(self.unit)*100) 
+	self:SetValue(UnitHealth(self.unit)/UnitHealthMax(self.unit)*100) 
+	pStatusbar.text:SetText(ReadableNumber(UnitHealth(self.unit)))
+	-- checking if player have a target to displayer the Target tStatusbar
+	if UnitExists("target") then
+		tStatusbar:Show()
+	else
+		tStatusbar:Hide()
+	end
 
-pStatusbar.text:SetText(ReadableNumber(UnitHealth(self.unit)))
 end)
 
 --------------------------------------------------------------------------------------------------------------
@@ -265,8 +268,8 @@ playerPowerBar:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
 local pPowerBar = playerPowerBar
 pPowerBar.unit = "player"
 pPowerBar:SetMinMaxValues(0,100)
-pPowerBar:SetPoint("CENTER",-300,-20)
-pPowerBar:SetSize(150,10)
+pPowerBar:SetPoint("CENTER",-300,-257)
+pPowerBar:SetSize(200,8)
 pPowerBar:Show()
 pPowerBar:SetValue(100)
 --pPowerBar:SetStatusBarColor(mainPowerColorR,mainPowerColorG,mainPowerColorB)
@@ -274,6 +277,7 @@ pPowerBar.text = pPowerBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightLa
 pPowerBar.text:SetAllPoints()
 
 --Drawing  Background and border under the playerpower Bar
+--[[
 playerPowerBarBg = CreateFrame("Statusbar",BORDER,UIParent)
 local pPowerBarBg = playerPowerBarBg
 pPowerBarBg:SetPoint("CENTER",-300,-20)
@@ -284,12 +288,15 @@ pPowerBarBg:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background",
                                             tile = true, tileSize = 16, edgeSize = 16, 
                                             insets = { left = 4, right = 4, top = 4, bottom = 4 }});
 pPowerBarBg:SetBackdropColor(0,0,0,1);
-
+]]
 --Run Script uptade a l'event OnUpdate (chaque Frame).
 pPowerBar:SetScript("OnUpdate",function(self) 
 self:SetValue(UnitPower("player",playerMainPowerType)/UnitPowerMax("player",playerMainPowerType)*100) 
-
 self:SetStatusBarColor(mainPowerColorR,mainPowerColorG,mainPowerColorB)
+
+
+
+
 end)
 
 --------------------------------------------------------------------------------------------------------------
@@ -302,8 +309,8 @@ playerPowerBar2:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
 local pPowerBar2 = playerPowerBar2
 pPowerBar2.unit = "player"
 pPowerBar2:SetMinMaxValues(0,100)
-pPowerBar2:SetPoint("CENTER",-300,-35)
-pPowerBar2:SetSize(150,10)
+pPowerBar2:SetPoint("CENTER",-300,-272)
+pPowerBar2:SetSize(200,12)
 pPowerBar2:Show()
 pPowerBar2:SetValue(100)
 --pPowerBar2:SetStatusBarColor(secondaryPowerColorR,secondaryPowerColorG,secondaryPowerColorB)
@@ -313,8 +320,8 @@ pPowerBar2.text:SetAllPoints()
 --Drawing  Background and border under the secondary /Power Bar
 playerPowerBar2Bg = CreateFrame("Statusbar",BORDER,UIParent)
 local pPowerBar2Bg = playerPowerBar2Bg
-pPowerBar2Bg:SetPoint("CENTER",-300,-35)
-pPowerBar2Bg:SetSize(160,20)
+pPowerBar2Bg:SetPoint("CENTER",-300,-272)
+pPowerBar2Bg:SetSize(208,20)
 pPowerBar2Bg:Show()
 pPowerBar2Bg:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
                                             edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
@@ -350,11 +357,11 @@ local tUnit = "target"
 targetHealthBar = CreateFrame("Statusbar",nil,UIParent)
 targetHealthBar:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
 
-local tStatusbar = targetHealthBar
+tStatusbar = targetHealthBar
 tStatusbar.unit = tUnit
 tStatusbar:SetMinMaxValues(0,100)
-tStatusbar:SetPoint("CENTER",300,0)
-tStatusbar:SetSize(150,20)
+tStatusbar:SetPoint("CENTER",300,-250)
+tStatusbar:SetSize(200,22)
 tStatusbar:Show()
 tStatusbar:SetValue(100)
 tStatusbar.text = tStatusbar:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
@@ -364,8 +371,8 @@ tStatusbar.text:SetAllPoints()
 --Drawing Player Background and border under the Target Bar
 targetHealthBarBg = CreateFrame("Statusbar",nil,UIParent)
 local tStatusbarBg = targetHealthBarBg
-tStatusbarBg:SetPoint("CENTER",300,0)
-tStatusbarBg:SetSize(160,30)
+tStatusbarBg:SetPoint("CENTER",300,-250)
+tStatusbarBg:SetSize(208,30)
 tStatusbarBg:Hide()
 tStatusbarBg:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
                                             edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
@@ -397,12 +404,14 @@ tStatusbar:SetScript("OnUpdate",function(self)
 			self:SetStatusBarColor(1,0,0)
 			else
 			self:SetStatusBarColor(1,1,0)
-			end			
+			end	
+					
 			tStatusbarBg:Show()
 			tStatusbar.text:Show()				
 			tStatusbar.text:SetText(ReadableNumber(UnitHealth(self.unit)))
 		end	
 	else
+		
 		tStatusbarBg:Hide()
 		tStatusbar.text:Hide()
 	end
@@ -436,8 +445,12 @@ corruptionBar.text:SetAllPoints()
 --exectution de la function setWarlockUi
 corruptionBar:RegisterEvent("UNIT_AURA")
 corruptionBar:SetScript("OnEvent", function(self, event, ...)
---print ("test hello")
+--expirationTime -> Number - Time at which the debuff expires (GetTime() as a reference frame).
+local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3  = UnitDebuff("target",1)
+print (GetTime(expirationTime))
+
 end)
+
 --------------------------------------------------------------------------------------------------------------
 -- temp code a
 --------------------------------------------------------------------------------------------------------------
