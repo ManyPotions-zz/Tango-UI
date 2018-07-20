@@ -1,8 +1,8 @@
 ## Interface: 80000
-## Title: Tango-UI |cff69ccf0Allo les amis|r  <3
+## Title:|cff69ccf0Tango-UI|r
 ## Author: Tango
 ## Version: 0.3
-## Notes: je fait des choses
+## Notes: add-on for monitoring players Life and power
 ## DefaultState: enabled
 
 

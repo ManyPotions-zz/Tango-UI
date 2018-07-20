@@ -415,6 +415,11 @@ tStatusbar:SetScript("OnUpdate",function(self)
 			hauntFrame:Show() --warlock ui
 			siphonLifeFrame:Show() --warlock ui
 			PhantomSingularityFrame:Show()--warlock ui
+			unstableAffliction1Frame:Show()--warlock ui
+			unstableAffliction2Frame:Show()--warlock ui
+			unstableAffliction3Frame:Show()--warlock ui
+			unstableAffliction4Frame:Show()--warlock ui
+			unstableAffliction5Frame:Show()--warlock ui
 		end	
 	else
 		corruptionFrame:Hide() --warlock ui
@@ -422,6 +427,11 @@ tStatusbar:SetScript("OnUpdate",function(self)
 		hauntFrame:Hide() --warlock ui
 		siphonLifeFrame:Hide() --warlock ui
 		PhantomSingularityFrame:Hide()--warlock ui
+		unstableAffliction1Frame:Hide()--warlock ui
+		unstableAffliction2Frame:Hide()--warlock ui
+		unstableAffliction3Frame:Hide()--warlock ui
+		unstableAffliction4Frame:Hide()--warlock ui
+		unstableAffliction5Frame:Hide()--warlock ui
 		tStatusbarBg:Hide()
 		tStatusbar.text:Hide()
 	end
@@ -449,7 +459,7 @@ corruptionBar:SetScript("OnUpdate",function(self)
 for i=1,40 do
 		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
 		if name == "Corruption" and unitCaster == "player" then
-		corruTimer = expirationTime - GetTime()
+		local corruTimer = expirationTime - GetTime()
 		self:SetValue(corruTimer/duration*100)
 		break
 	else
@@ -474,7 +484,7 @@ agonyBar:SetScript("OnUpdate",function(self)
 for i=1,40 do
 		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
 		if name == "Agony" and unitCaster == "player" then
-		agonyTimer = expirationTime - GetTime()
+		local agonyTimer = expirationTime - GetTime()
 		self:SetValue(agonyTimer/duration*100)
 		break
 	else
@@ -500,7 +510,7 @@ hauntBar:SetScript("OnUpdate",function(self)
 for i=1,40 do
 		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
 		if name == "Haunt" and unitCaster == "player" then
-		hauntTimer = expirationTime - GetTime()
+		local hauntTimer = expirationTime - GetTime()
 		self:SetValue(hauntTimer/duration*100)
 		break
 	else
@@ -526,7 +536,7 @@ siphonLifeBar:SetScript("OnUpdate",function(self)
 for i=1,40 do
 		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
 		if name == "Siphon Life" and unitCaster == "player" then
-		siphonLifeTimer = expirationTime - GetTime()
+		local siphonLifeTimer = expirationTime - GetTime()
 		self:SetValue(siphonLifeTimer/duration*100)
 		break
 	else
@@ -552,7 +562,7 @@ PhantomSingularityBar:SetScript("OnUpdate",function(self)
 for i=1,40 do
 		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
 		if name == "Phantom Singularity" or name == "Vile Taint" and unitCaster == "player" then
-		siphonLifeTimer = expirationTime - GetTime()
+		local siphonLifeTimer = expirationTime - GetTime()
 		self:SetValue(siphonLifeTimer/duration*100)
 		break
 	else
@@ -560,6 +570,137 @@ for i=1,40 do
 	  end
 	end
 end)
+
+--Unstable Affliction 1 config
+unstableAffliction1Frame = CreateFrame("Statusbar",nil,UIParent)
+unstableAffliction1Frame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local unstableAffliction1Bar = unstableAffliction1Frame
+unstableAffliction1Bar.unit = target
+unstableAffliction1Bar:SetMinMaxValues(0,100)
+unstableAffliction1Bar:SetPoint("CENTER",300,-160)
+unstableAffliction1Bar:SetSize(200,15)
+unstableAffliction1Bar:Hide()
+unstableAffliction1Bar:SetValue(0)
+unstableAffliction1Bar:SetStatusBarColor(1,0.8,0.16, 1)
+
+----Unstable Affliction 1 bar tick
+unstableAffliction1Bar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)		
+		if spellId == 233490 and unitCaster == "player" then
+		local unstableAffliction1Timer = expirationTime - GetTime()
+		self:SetValue(unstableAffliction1Timer/duration*100)		
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
+end)
+
+--Unstable Affliction 2 config
+unstableAffliction2Frame = CreateFrame("Statusbar",nil,UIParent)
+unstableAffliction2Frame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local unstableAffliction2Bar = unstableAffliction2Frame
+unstableAffliction2Bar.unit = target
+unstableAffliction2Bar:SetMinMaxValues(0,100)
+unstableAffliction2Bar:SetPoint("CENTER",300,-145)
+unstableAffliction2Bar:SetSize(200,15)
+unstableAffliction2Bar:Hide()
+unstableAffliction2Bar:SetValue(0)
+unstableAffliction2Bar:SetStatusBarColor(1,0.8,0.16, 1)
+
+----Unstable Affliction 2 bar tick
+unstableAffliction2Bar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)		
+		if spellId == 233496 and unitCaster == "player" then
+		local unstableAffliction1Timer = expirationTime - GetTime()
+		self:SetValue(unstableAffliction1Timer/duration*100)		
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
+end)
+
+--Unstable Affliction 3 config
+unstableAffliction3Frame = CreateFrame("Statusbar",nil,UIParent)
+unstableAffliction3Frame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local unstableAffliction3Bar = unstableAffliction3Frame
+unstableAffliction3Bar.unit = target
+unstableAffliction3Bar:SetMinMaxValues(0,100)
+unstableAffliction3Bar:SetPoint("CENTER",300,-130)
+unstableAffliction3Bar:SetSize(200,15)
+unstableAffliction3Bar:Hide()
+unstableAffliction3Bar:SetValue(0)
+unstableAffliction3Bar:SetStatusBarColor(1,0.8,0.16, 1)
+
+----Unstable Affliction 3 bar tick
+unstableAffliction3Bar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)		
+		if spellId == 233497 and unitCaster == "player" then
+		local unstableAffliction1Timer = expirationTime - GetTime()
+		self:SetValue(unstableAffliction1Timer/duration*100)		
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
+end)
+
+--Unstable Affliction 4 config
+unstableAffliction4Frame = CreateFrame("Statusbar",nil,UIParent)
+unstableAffliction4Frame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local unstableAffliction4Bar = unstableAffliction4Frame
+unstableAffliction4Bar.unit = target
+unstableAffliction4Bar:SetMinMaxValues(0,100)
+unstableAffliction4Bar:SetPoint("CENTER",300,-115)
+unstableAffliction4Bar:SetSize(200,15)
+unstableAffliction4Bar:Hide()
+unstableAffliction4Bar:SetValue(0)
+unstableAffliction4Bar:SetStatusBarColor(1,0.8,0.16, 1)
+
+----Unstable Affliction 4 bar tick
+unstableAffliction4Bar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)		
+		if spellId == 233498 and unitCaster == "player" then
+		local unstableAffliction1Timer = expirationTime - GetTime()
+		self:SetValue(unstableAffliction1Timer/duration*100)		
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
+end)
+
+--Unstable Affliction 5 config
+unstableAffliction5Frame = CreateFrame("Statusbar",nil,UIParent)
+unstableAffliction5Frame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local unstableAffliction5Bar = unstableAffliction5Frame
+unstableAffliction5Bar.unit = target
+unstableAffliction5Bar:SetMinMaxValues(0,100)
+unstableAffliction5Bar:SetPoint("CENTER",300,-100)
+unstableAffliction5Bar:SetSize(200,15)
+unstableAffliction5Bar:Hide()
+unstableAffliction5Bar:SetValue(0)
+unstableAffliction5Bar:SetStatusBarColor(1,0.8,0.16, 1)
+
+----Unstable Affliction 5 bar tick
+unstableAffliction5Bar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)		
+		if spellId == 233499 and unitCaster == "player" then
+		local unstableAffliction1Timer = expirationTime - GetTime()
+		self:SetValue(unstableAffliction1Timer/duration*100)		
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
+end)
+
 
 
 --------------------------------------------------------------------------------------------------------------
