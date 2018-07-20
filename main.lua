@@ -1,5 +1,6 @@
 
-print("Hello " .. UnitName("player"));
+print("|cFF0099ff Tango-UI |r Bonjour " .. UnitName("player") .. " !");
+print("|cFF0099ff Tango-UI |r v.0.3");
 
 --------------------------------------------------------------------------------------------------------------
 -- Addon Initialisation
@@ -225,8 +226,8 @@ playerHealthBar:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
 local pStatusbar = playerHealthBar
 pStatusbar.unit = pUnit
 pStatusbar:SetMinMaxValues(0,100)
-pStatusbar:SetPoint("CENTER",-300,-246)
-pStatusbar:SetSize(200,14)
+pStatusbar:SetPoint("CENTER",-300,-245)
+pStatusbar:SetSize(200,20)
 pStatusbar:Show()
 pStatusbar:SetValue(100)
 pStatusbar:SetStatusBarColor(0,1,0, 1)
@@ -237,7 +238,7 @@ pStatusbar.text:SetAllPoints()
 playerHealthBarBg = CreateFrame("Statusbar",BORDER,UIParent)
 local pStatusbarBg = playerHealthBarBg
 pStatusbarBg:SetPoint("CENTER",-300,-250)
-pStatusbarBg:SetSize(208,30)
+pStatusbarBg:SetSize(209,39)
 pStatusbarBg:Show()
 pStatusbarBg:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
                                             edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
@@ -268,8 +269,8 @@ playerPowerBar:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
 local pPowerBar = playerPowerBar
 pPowerBar.unit = "player"
 pPowerBar:SetMinMaxValues(0,100)
-pPowerBar:SetPoint("CENTER",-300,-257)
-pPowerBar:SetSize(200,8)
+pPowerBar:SetPoint("CENTER",-300,-260)
+pPowerBar:SetSize(200,10)
 pPowerBar:Show()
 pPowerBar:SetValue(100)
 --pPowerBar:SetStatusBarColor(mainPowerColorR,mainPowerColorG,mainPowerColorB)
@@ -309,7 +310,7 @@ playerPowerBar2:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
 local pPowerBar2 = playerPowerBar2
 pPowerBar2.unit = "player"
 pPowerBar2:SetMinMaxValues(0,100)
-pPowerBar2:SetPoint("CENTER",-300,-272)
+pPowerBar2:SetPoint("CENTER",-300,-277)
 pPowerBar2:SetSize(200,12)
 pPowerBar2:Show()
 pPowerBar2:SetValue(100)
@@ -320,7 +321,7 @@ pPowerBar2.text:SetAllPoints()
 --Drawing  Background and border under the secondary /Power Bar
 playerPowerBar2Bg = CreateFrame("Statusbar",BORDER,UIParent)
 local pPowerBar2Bg = playerPowerBar2Bg
-pPowerBar2Bg:SetPoint("CENTER",-300,-272)
+pPowerBar2Bg:SetPoint("CENTER",-300,-277)
 pPowerBar2Bg:SetSize(208,20)
 pPowerBar2Bg:Show()
 pPowerBar2Bg:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
@@ -361,7 +362,7 @@ tStatusbar = targetHealthBar
 tStatusbar.unit = tUnit
 tStatusbar:SetMinMaxValues(0,100)
 tStatusbar:SetPoint("CENTER",300,-250)
-tStatusbar:SetSize(200,22)
+tStatusbar:SetSize(200,30)
 tStatusbar:Show()
 tStatusbar:SetValue(100)
 tStatusbar.text = tStatusbar:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
@@ -372,7 +373,7 @@ tStatusbar.text:SetAllPoints()
 targetHealthBarBg = CreateFrame("Statusbar",nil,UIParent)
 local tStatusbarBg = targetHealthBarBg
 tStatusbarBg:SetPoint("CENTER",300,-250)
-tStatusbarBg:SetSize(208,30)
+tStatusbarBg:SetSize(209,39)
 tStatusbarBg:Hide()
 tStatusbarBg:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
                                             edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
@@ -409,52 +410,202 @@ tStatusbar:SetScript("OnUpdate",function(self)
 			tStatusbarBg:Show()
 			tStatusbar.text:Show()				
 			tStatusbar.text:SetText(ReadableNumber(UnitHealth(self.unit)))
+			corruptionFrame:Show() --warlock ui
+			agonyFrame:Show() --warlock ui
+			hauntFrame:Show() --warlock ui
+			siphonLifeFrame:Show() --warlock ui
+			PhantomSingularityFrame:Show()--warlock ui
 		end	
 	else
-		
+		corruptionFrame:Hide() --warlock ui
+		agonyFrame:Hide() --warlock ui
+		hauntFrame:Hide() --warlock ui
+		siphonLifeFrame:Hide() --warlock ui
+		PhantomSingularityFrame:Hide()--warlock ui
 		tStatusbarBg:Hide()
 		tStatusbar.text:Hide()
 	end
 
 end)		
 --------------------------------------------------------------------------------------------------------------
--- Afflication Warlock Debuff -- 
+-- Afflication  Spesific UI -- 
 --------------------------------------------------------------------------------------------------------------
-local buffs = {
-    ["Battle Shout"] = true,
-    ["Blessing of Kings"] = true,
-    ["Horn of Winter"] = true,
-    ["Mark of the Wild"] = true,
-    ["Well Fed"] = true,
-}
- 
 
+--Curruption frame config
 corruptionFrame = CreateFrame("Statusbar",nil,UIParent)
 corruptionFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
 local corruptionBar = corruptionFrame
 corruptionBar.unit = target
 corruptionBar:SetMinMaxValues(0,100)
-corruptionBar:SetPoint("CENTER",300,20)
-corruptionBar:SetSize(150,10)
-corruptionBar:Show()
+corruptionBar:SetPoint("CENTER",300,-220)
+corruptionBar:SetSize(200,15)
+corruptionBar:Hide()
 corruptionBar:SetValue(0)
 corruptionBar:SetStatusBarColor(1,0.1,0.1, 1)
-corruptionBar.text = corruptionBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
-corruptionBar.text:SetAllPoints()
 
---exectution de la function setWarlockUi
-corruptionBar:RegisterEvent("UNIT_AURA")
-corruptionBar:SetScript("OnEvent", function(self, event, ...)
---expirationTime -> Number - Time at which the debuff expires (GetTime() as a reference frame).
-local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3  = UnitDebuff("target",1)
+
+--Corruption bar tick
+corruptionBar:SetScript("OnUpdate",function(self)
 for i=1,40 do
-  local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
-  if name then
-    --print(i,name)
-  end
-end
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+		if name == "Corruption" and unitCaster == "player" then
+		corruTimer = expirationTime - GetTime()
+		self:SetValue(corruTimer/duration*100)
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
+end)
+--Agony frame config
+agonyFrame = CreateFrame("Statusbar",nil,UIParent)
+agonyFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local agonyBar = agonyFrame
+agonyBar.unit = target
+agonyBar:SetMinMaxValues(0,100)
+agonyBar:SetPoint("CENTER",300,-205)
+agonyBar:SetSize(200,15)
+agonyBar:Hide()
+agonyBar:SetValue(0)
+agonyBar:SetStatusBarColor(0.9,0.9,0.9, 1)
+
+--Agony bar tick
+agonyBar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+		if name == "Agony" and unitCaster == "player" then
+		agonyTimer = expirationTime - GetTime()
+		self:SetValue(agonyTimer/duration*100)
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
 end)
 
+--Haunt frame config
+hauntFrame = CreateFrame("Statusbar",nil,UIParent)
+hauntFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local hauntBar = hauntFrame
+hauntBar.unit = target
+hauntBar:SetMinMaxValues(0,100)
+hauntBar:SetPoint("CENTER",300,-190)
+hauntBar:SetSize(200,15)
+hauntBar:Hide()
+hauntBar:SetValue(0)
+hauntBar:SetStatusBarColor(0.7,0.1,0.7, 1)
+
+--Haunt bar tick
+hauntBar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+		if name == "Haunt" and unitCaster == "player" then
+		hauntTimer = expirationTime - GetTime()
+		self:SetValue(hauntTimer/duration*100)
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
+end)
+
+--Siphon Life config
+siphonLifeFrame = CreateFrame("Statusbar",nil,UIParent)
+siphonLifeFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local siphonLifeBar = siphonLifeFrame
+siphonLifeBar.unit = target
+siphonLifeBar:SetMinMaxValues(0,100)
+siphonLifeBar:SetPoint("CENTER",300,-175)
+siphonLifeBar:SetSize(200,15)
+siphonLifeBar:Hide()
+siphonLifeBar:SetValue(0)
+siphonLifeBar:SetStatusBarColor(0.2,0.9,0.2, 1)
+
+--Siphon Life bar tick
+siphonLifeBar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+		if name == "Siphon Life" and unitCaster == "player" then
+		siphonLifeTimer = expirationTime - GetTime()
+		self:SetValue(siphonLifeTimer/duration*100)
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
+end)
+
+--Phantom Singularity and Vile Taint config
+PhantomSingularityFrame = CreateFrame("Statusbar",nil,UIParent)
+PhantomSingularityFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local PhantomSingularityBar = PhantomSingularityFrame
+PhantomSingularityBar.unit = target
+PhantomSingularityBar:SetMinMaxValues(0,100)
+PhantomSingularityBar:SetPoint("CENTER",300,-175)
+PhantomSingularityBar:SetSize(200,15)
+PhantomSingularityBar:Hide()
+PhantomSingularityBar:SetValue(0)
+PhantomSingularityBar:SetStatusBarColor(0.2,0.2,0.99, 1)
+
+--Phantom Singularity and Vile Taint bar tick
+PhantomSingularityBar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+		if name == "Phantom Singularity" or name == "Vile Taint" and unitCaster == "player" then
+		siphonLifeTimer = expirationTime - GetTime()
+		self:SetValue(siphonLifeTimer/duration*100)
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
+end)
+
+
+--------------------------------------------------------------------------------------------------------------
+-- Warrior Spesific UI -- 
+--------------------------------------------------------------------------------------------------------------
+--[[
+function playerIsWarrior()
+	if (UnitClass("player") == "Warrior") then
+	-- --marche pas
+	
+
+    local name,_,_,_,_,_,expirationTime ,_,_,_,_,_,_,_,_,_,value2 = UnitBuff("player", "Ignore Pain")--Trouver  Ignore Pain
+		if name then
+			ignorePainValue = value2
+			ignorePainSeconds = (expirationTime - GetTime())		   
+			ignorePainValue = ignorePainValue / 1000000
+			abbr = "m"
+			ignorePainValue = liferound(ignorePainValue) .. abbr
+			--Create the Ignor Pain BAR ----------------------
+				local START = 15
+				local END = 0
+				clearThatFrame(ignorePainBar)
+				ignorePainBar = CreateFrame("StatusBar", nil, UIParent)
+				ignorePainBar:SetSize(150, 16)
+				ignorePainBar:SetPoint("CENTER",UIParent,"CENTER", -275, -220)	
+				ignorePainBar:SetBackdropColor(0, 0, 0, 0.7)
+				ignorePainBar:SetStatusBarTexture(Interface\TargetingFrame\UI-StatusBar)
+				ignorePainBar:SetStatusBarColor(1, 0.63, 0.05)
+				ignorePainBarText = ignorePainBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightMedium")
+				ignorePainBarText:SetPoint("LEFT", 10, 0)
+				ignorePainBarText:SetText(ignorePainValue)
+				ignorePainBar:SetMinMaxValues(END, START)
+				local timer = ignorePainSeconds
+				-- this function will run repeatedly, incrementing the value of timer as it goes
+				ignorePainBar:SetScript("OnUpdate", function(self, elapsed)
+				timer = timer - elapsed
+				self:SetValue(timer)
+
+				end)-- end ignor Pain Time Update Script
+		else	
+		clearThatFrame(ignorePainBar)
+		end--end Check for Ignor Pain
+		
+	end-- end check if warrior
+end--end function if warrior 
+]]
 --------------------------------------------------------------------------------------------------------------
 -- temp code a
 --------------------------------------------------------------------------------------------------------------
