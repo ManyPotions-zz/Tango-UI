@@ -447,8 +447,12 @@ corruptionBar:RegisterEvent("UNIT_AURA")
 corruptionBar:SetScript("OnEvent", function(self, event, ...)
 --expirationTime -> Number - Time at which the debuff expires (GetTime() as a reference frame).
 local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3  = UnitDebuff("target",1)
---print (GetTime(expirationTime))
-
+for i=1,40 do
+  local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+  if name then
+    --print(i,name)
+  end
+end
 end)
 
 --------------------------------------------------------------------------------------------------------------
