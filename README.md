@@ -2,11 +2,11 @@
 ###### Interface addon for World of Warcraft.
 
 ## Features
- Tango-UI is an add-on for monitoring players Life and power,
-
+Tango-UI is an add-on for monitoring players Life and power,
+Warlock curse over target bar.
 
 ## ToDo / User requested features:
-adding Warlock curse over target bar.
+
 
 fixing status bar on;
 - [x] Warrior
@@ -14,13 +14,13 @@ fixing status bar on;
 - [x] Hunter
 - [x] Rogue
 - [ ] Priest 	`not tested yet`       
-- [ ] DeathKnight `don't work on rune system yet.`
+- [x] DeathKnight
 - [ ] Shaman       `not tested yet`
 - [ ] Mage         `not tested yet`
 - [x] Warlock
 - [ ] Monk         `not tested yet`
 - [ ] Druid        `player power not correctly update when changing form.`
-- [ ] Demon Hunter `player power not update when changing spec.`
+- [x] Demon Hunter
 
 
 

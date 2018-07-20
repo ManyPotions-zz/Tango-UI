@@ -1,6 +1,6 @@
 
 print("|cFF0099ff Tango-UI |r Bonjour " .. UnitName("player") .. " !");
-print("|cFF0099ff Tango-UI |r v.0.3");
+print("|cFF0099ff Tango-UI |r v.8.0.1.27101");
 
 --------------------------------------------------------------------------------------------------------------
 -- Addon Initialisation
@@ -114,22 +114,37 @@ local function setAddonDefault(self,elapsed)
 			mainPowerColorR = powerIndex[2]
 			mainPowerColorG = powerIndex[3]
 			mainPowerColorB = powerIndex[4]	
-			local powerIndex2 = powerColor[5]
+			--local powerIndex2 = powerColor[5]
 			--tree/stag form dont have secondary power
 			secondaryPowerType = nil		
 		end
-		--print (secondaryPowerType)
-		elseif playerClass == "Demon Hunter" and playerCurrentSpec == 2 then
+
+	elseif playerClass == "Demon Hunter" and playerCurrentSpec == 2 then
 		--print ("this is a Vengeance Demon Hunter")
 		playerMainPowerType = 18
 		local powerIndex = powerColor[19]			
 		mainPowerColorR = powerIndex[2]
 		mainPowerColorG = powerIndex[3]
 		mainPowerColorB = powerIndex[4]	
-		local powerIndex2 = powerColor[5]
-		--tree/stag form dont have secondary power
-		secondaryPowerType = nil		
-		else
+		--local powerIndex2 = powerColor[5]
+	
+	elseif playerClass == "Death Knight" then
+		--print ("this is a Death Knight")
+		playerMainPowerType = 6
+		local powerIndex = powerColor[7]			
+		mainPowerColorR = powerIndex[2]
+		mainPowerColorG = powerIndex[3]
+		mainPowerColorB = powerIndex[4]	
+			
+		secondaryPowerType = 5
+		local powerIndex2 = powerColor[6]			
+		secondaryPowerColorR = powerIndex2[2]
+		secondaryPowerColorG = powerIndex2[3]
+		secondaryPowerColorB = powerIndex2[4]	
+		
+		
+			
+	else
 		--Getting Mainpower information
 		mainPower = {"0", "1", "2", "3", "5", "12", "17", "18"}
 		for  i = 1, 8 do
@@ -178,7 +193,6 @@ local function setAddonDefault(self,elapsed)
 			end
 		end		
 	end	
-
 end
 
 --exectution de la function setAddonDefault
@@ -330,20 +344,32 @@ pPowerBar2Bg:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background",
                                             insets = { left = 4, right = 4, top = 4, bottom = 4 }});
 pPowerBar2Bg:SetBackdropColor(0,0,0,1);
 
---Run Script uptade a l'event OnUpdate (chaque Frame).
 
 
+print ()
 
 pPowerBar2:SetScript("OnUpdate",function(self) 
 	if (secondaryPowerType == nil ) then
-		--pPowerBar2:Hide()
 		pPowerBar2Bg:Hide()
 		pPowerBar2:SetValue(0)
 		
 	else
-	pPowerBar2Bg:Show()
-		self:SetValue(UnitPower("player",secondaryPowerType)/UnitPowerMax("player",secondaryPowerType)*100) 
+		pPowerBar2Bg:Show()
 		self:SetStatusBarColor(secondaryPowerColorR,secondaryPowerColorG,secondaryPowerColorB)
+		
+		if playerClass == "Death Knight" then
+			pPowerBar2:SetValue(50)
+			local runeAmount = 0
+			for i=1,6 do
+				local start, duration, runeReady = GetRuneCooldown(i)
+				if runeReady == true then
+					runeAmount = runeAmount+1
+				end			
+			end
+			self:SetValue(runeAmount/6*100) 
+		else
+			self:SetValue(UnitPower("player",secondaryPowerType)/UnitPowerMax("player",secondaryPowerType)*100) 
+		end
 		
 	end
 end)
@@ -410,17 +436,19 @@ tStatusbar:SetScript("OnUpdate",function(self)
 			tStatusbarBg:Show()
 			tStatusbar.text:Show()				
 			tStatusbar.text:SetText(ReadableNumber(UnitHealth(self.unit)))
-			corruptionFrame:Show() --warlock ui
-			agonyFrame:Show() --warlock ui
-			hauntFrame:Show() --warlock ui
-			siphonLifeFrame:Show() --warlock ui
-			PhantomSingularityFrame:Show()--warlock ui
-			unstableAffliction1Frame:Show()--warlock ui
-			unstableAffliction2Frame:Show()--warlock ui
-			unstableAffliction3Frame:Show()--warlock ui
-			unstableAffliction4Frame:Show()--warlock ui
-			unstableAffliction5Frame:Show()--warlock ui
+			
 		end	
+		
+		corruptionFrame:Show() --warlock ui
+		agonyFrame:Show() --warlock ui
+		hauntFrame:Show() --warlock ui
+		siphonLifeFrame:Show() --warlock ui
+		PhantomSingularityFrame:Show()--warlock ui
+		unstableAffliction1Frame:Show()--warlock ui
+		unstableAffliction2Frame:Show()--warlock ui
+		unstableAffliction3Frame:Show()--warlock ui
+		unstableAffliction4Frame:Show()--warlock ui
+		unstableAffliction5Frame:Show()--warlock ui
 	else
 		corruptionFrame:Hide() --warlock ui
 		agonyFrame:Hide() --warlock ui
@@ -440,30 +468,54 @@ end)
 --------------------------------------------------------------------------------------------------------------
 -- Afflication  Spesific UI -- 
 --------------------------------------------------------------------------------------------------------------
+warlockUiFrame = CreateFrame("Statusbar",nil,UIParent)
+local warlockUiBar = warlockUiFrame
+warlockUiBar.unit = "target"
+warlockUiBar:SetMinMaxValues(0,100)
+warlockUiBar:SetPoint("CENTER",300,-220)
+warlockUiBar:SetSize(200,15)
+warlockUiBar:Hide()
+warlockUiBar:SetValue(0)
+warlockUiBar:SetStatusBarColor(1,0.1,0.1, 1)
+warlockUiBar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+		
+		if name == "Corruption" and unitCaster == "player" then
+			local corruTimer = expirationTime - GetTime()
+			self:SetValue(corruTimer/duration*100)
+		
+			break
+		else
+			self:SetValue(0)	
+	  end
+	end
+end)
 
 --Curruption frame config
 corruptionFrame = CreateFrame("Statusbar",nil,UIParent)
 corruptionFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
 local corruptionBar = corruptionFrame
-corruptionBar.unit = target
+corruptionBar.unit = "target"
 corruptionBar:SetMinMaxValues(0,100)
 corruptionBar:SetPoint("CENTER",300,-220)
 corruptionBar:SetSize(200,15)
-corruptionBar:Hide()
+--corruptionBar:Hide()
 corruptionBar:SetValue(0)
 corruptionBar:SetStatusBarColor(1,0.1,0.1, 1)
 
 
---Corruption bar tick
+--Corruption bar tick 
 corruptionBar:SetScript("OnUpdate",function(self)
-for i=1,40 do
+	for i=1,40 do
 		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+		
 		if name == "Corruption" and unitCaster == "player" then
-		local corruTimer = expirationTime - GetTime()
-		self:SetValue(corruTimer/duration*100)
-		break
-	else
-		self:SetValue(0)	
+			local corruTimer = expirationTime - GetTime()
+			self:SetValue(corruTimer/duration*100)
+			break
+		else
+			self:SetValue(0)	
 	  end
 	end
 end)
@@ -508,8 +560,8 @@ hauntBar:SetStatusBarColor(0.7,0.1,0.7, 1)
 --Haunt bar tick
 hauntBar:SetScript("OnUpdate",function(self)
 for i=1,40 do
-		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
-		if name == "Haunt" and unitCaster == "player" then
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i,"player")
+		if name == "Haunt" then
 		local hauntTimer = expirationTime - GetTime()
 		self:SetValue(hauntTimer/duration*100)
 		break

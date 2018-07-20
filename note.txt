@@ -1,20 +1,31 @@
+-----------------------------------------------------------
+--Reference
+-----------------------------------------------------------
+--/fstack pour depug
 
-MANA	0	
-RAGE	1	
-FOCUS	2	
-ENERGY	3	
-OMBO_POINTS	4	
-RUNES	5	
-RUNIC_POWER	6	
-SOUL_SHARDS	7	
-LUNAR_POWER	8	
-HOLY_POWER	9	
-ALTERNATE_POWER	10	
-MAELSTROM	11	
-CHI	12
-INSANITY 13	
-OBSOLETE 14	
-OBSOLETE2 	15	
-ARCANE_CHARGES 16	
-FURY	17	
-PAIN	18	
+--print("|cffff0000 Red Text |r White Text")
+--|cFFFF0000 - Red text
+--|cFF00FF00 - Green text
+--|cFF0000FF - Blue text
+--|cFFFFFF00 - Yellow text
+
+--GameFontNormal
+--GameFontNormalMed3
+--PVPInfoTextFont
+--GameFontNormalLeftGrey --perfect for Dead on nameplat
+--GameFontHighlightMedium
+
+--FrameStrata is a frame property that determines the coarse order in which UI frames are composited onto the screen. The following stratas exist:
+--[[
+WORLD (reserved for WorldFrame, cannot be assigned)
+BACKGROUND
+LOW
+MEDIUM
+HIGH
+DIALOG
+FULLSCREEN
+FULLSCREEN_DIALOG
+TOOLTIP
+]]
+--BlizzardInterfaceArt\Interface\COMMON\icon-alliance
+--BlizzardInterfaceArt\Interface\COMMON\icon-horde
