@@ -758,6 +758,39 @@ end)
 --------------------------------------------------------------------------------------------------------------
 -- Warrior Spesific UI -- 
 --------------------------------------------------------------------------------------------------------------
+
+
+--ignorePain config
+ignorePainFrame = CreateFrame("Statusbar",nil,UIParent)
+ignorePainFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local ignorePainBar = ignorePainFrame
+ignorePainBar.unit = target
+ignorePainBar:SetMinMaxValues(0,100)
+ignorePainBar:SetPoint("CENTER",300,-100)
+ignorePainBar:SetSize(200,15)
+ignorePainBar:Show()
+ignorePainBar:SetValue(0)
+ignorePainBar:SetStatusBarColor(1,0.8,0.16, 1)
+
+----ignore Pain bar tick
+print (playerClass)
+if playerClass == "Warrior" then
+	ignorePainBar:SetScript("OnUpdate",function(self)
+		for i=1,40 do
+			local name, icon, _, _, _, etime = UnitBuff("player",i)
+			if name then
+				print(("%d=%s, %s, %.2f minutes left."):format(i,name,icon,(etime-GetTime())/60))
+			end
+		end
+	end)
+end
+
+
+
+
+
+
+
 --[[
 function playerIsWarrior()
 	if (UnitClass("player") == "Warrior") then
