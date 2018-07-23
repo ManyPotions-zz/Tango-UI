@@ -779,7 +779,7 @@ if playerClass == "Warrior" then
 		for i=1,40 do
 			local name, icon, _, _, _, etime = UnitBuff("player",i)
 			if name then
-				print(("%d=%s, %s, %.2f minutes left."):format(i,name,icon,(etime-GetTime())/60))
+				--print(("%d=%s, %s, %.2f minutes left."):format(i,name,icon,(etime-GetTime())/60))
 			end
 		end
 	end)
