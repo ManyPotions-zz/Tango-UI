@@ -442,6 +442,8 @@ tStatusbar:SetScript("OnUpdate",function(self)
 		unstableAffliction3Frame:Show()--warlock ui
 		unstableAffliction4Frame:Show()--warlock ui
 		unstableAffliction5Frame:Show()--warlock ui
+		rakeFrame:Show()--druid ui
+		ripeFrame:Show()--druid ui
 	else
 		corruptionFrame:Hide() --warlock ui
 		agonyFrame:Hide() --warlock ui
@@ -453,6 +455,8 @@ tStatusbar:SetScript("OnUpdate",function(self)
 		unstableAffliction3Frame:Hide()--warlock ui
 		unstableAffliction4Frame:Hide()--warlock ui
 		unstableAffliction5Frame:Hide()--warlock ui
+		rakeFrame:Hide()--druid ui
+		ripeFrame:Hide()--druid ui
 		tStatusbarBg:Hide()
 		tStatusbar.text:Hide()
 	end
@@ -778,9 +782,61 @@ if playerClass == "Warrior" then
 	end)
 end
 
+--------------------------------------------------------------------------------------------------------------
+-- Druid Feral  Spesific UI -- 
+--------------------------------------------------------------------------------------------------------------
+--Rake frame config
+rakeFrame = CreateFrame("Statusbar",nil,UIParent)
+rakeFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local rakeBar = rakeFrame
+rakeBar.unit = "target"
+rakeBar:SetMinMaxValues(0,100)
+rakeBar:SetPoint("CENTER",300,-220)
+rakeBar:SetSize(200,15)
+rakeBar:Hide()
+rakeBar:SetValue(0)
+rakeBar:SetStatusBarColor(1,0.1,0.1, 1)
+--Rake bar tick
+rakeBar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+		
+		if name == "Rake" and unitCaster == "player" then
+			local rakeTimer = expirationTime - GetTime()
+			self:SetValue(rakeTimer/duration*100)
+		
+			break
+		else
+			self:SetValue(0)	
+	  end
+	end
+end)
 
+--Ripe frame config
+ripeFrame = CreateFrame("Statusbar",nil,UIParent)
+ripeFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local ripeBar = ripeFrame
+ripeBar.unit = target
+ripeBar:SetMinMaxValues(0,100)
+ripeBar:SetPoint("CENTER",300,-205)
+ripeBar:SetSize(200,15)
+ripeBar:Hide()
+ripeBar:SetValue(0)
+ripeBar:SetStatusBarColor(0.9,0.9,0.9, 1)
 
-
+--Ripe bar tick
+ripeBar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+		if name == "Rip" and unitCaster == "player" then
+		local ripeTimer = expirationTime - GetTime()
+		self:SetValue(ripeTimer/duration*100)
+		break
+	else
+		self:SetValue(0)	
+	  end
+	end
+end)
 
 
 
