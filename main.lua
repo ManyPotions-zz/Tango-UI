@@ -34,20 +34,18 @@ powerColor = {
 --------------------------------------------------------------------------------------------------------------
 -- General fonction
 --------------------------------------------------------------------------------------------------------------
-local function isempty(s)
-  return s == nil or s == ''
-end
-
 --getting basic information
 playerClass = UnitClass("player")
 playerCurrentSpec =  GetSpecialization()
---print (playerCurrentSpec)
+
 
 --Function pour definir les value qui on besoin d'etre mise a jours a PLAYER_ENTERING_WORLD
 local function setAddonDefault(self,elapsed)
+
 	
 	--Getting player powertype information for Druid	
 	if playerClass == "Druid" then	
+		--local MoonkinisKnown = IsSpellKnown(197625) -- check if player know Moonkin Form
 		local playerForm = GetShapeshiftForm("player")
 		if playerForm == 0 then
 			--print "Humanoid"			
@@ -56,7 +54,6 @@ local function setAddonDefault(self,elapsed)
 			mainPowerColorR = powerIndex[2]
 			mainPowerColorG = powerIndex[3]
 			mainPowerColorB = powerIndex[4]	
-			local powerIndex2 = powerColor[5]
 			--Humanoid form dont have secondary power
 			secondaryPowerType = nil
 		
@@ -67,7 +64,6 @@ local function setAddonDefault(self,elapsed)
 			mainPowerColorR = powerIndex[2]
 			mainPowerColorG = powerIndex[3]
 			mainPowerColorB = powerIndex[4]	
-			local powerIndex2 = powerColor[5]
 			--Bear form dont have secondary power
 			secondaryPowerType = nil
 
@@ -85,18 +81,16 @@ local function setAddonDefault(self,elapsed)
 			secondaryPowerColorB = powerIndex2[4]
 					
 		elseif playerForm == 3 then
-			--print "travel"
+			--print "travel" 
 			playerMainPowerType = 0
 			local powerIndex = powerColor[1]			
 			mainPowerColorR = powerIndex[2]
 			mainPowerColorG = powerIndex[3]
 			mainPowerColorB = powerIndex[4]	
-			local powerIndex2 = powerColor[5]
-			--travel form dont have secondary power
 			secondaryPowerType = nil
-			
-		elseif playerForm == 4 then
-			--print "Mookin"
+				
+		elseif playerForm == 4 and playerCurrentSpec == 1 then
+			--print "Mookin" -- playerCurrentSpec est utiliser parceque les moonkin on un astral bar selement avec leur Main spec
 			playerMainPowerType = 8
 			local powerIndex = powerColor[9]			
 			mainPowerColorR = powerIndex[2]
@@ -108,13 +102,12 @@ local function setAddonDefault(self,elapsed)
 			secondaryPowerColorG = powerIndex2[3]
 			secondaryPowerColorB = powerIndex2[4]		
 		else 
-			--print "tree/stag"
+			--print "tree/stag/humanoid again"
 			playerMainPowerType = 0
 			local powerIndex = powerColor[1]			
 			mainPowerColorR = powerIndex[2]
 			mainPowerColorG = powerIndex[3]
 			mainPowerColorB = powerIndex[4]	
-			--local powerIndex2 = powerColor[5]
 			--tree/stag form dont have secondary power
 			secondaryPowerType = nil		
 		end
