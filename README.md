@@ -19,7 +19,7 @@ fixing status bar on;
 - [ ] Mage         `not tested yet`
 - [x] Warlock
 - [ ] Monk         `not tested yet`
-- [ ] Druid        `player power not correctly update when changing form.`
+- [x] Druid        
 - [x] Demon Hunter
 
 
