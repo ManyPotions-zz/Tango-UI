@@ -42,7 +42,7 @@ playerCurrentSpec =  GetSpecialization()
 --Function pour definir les value qui on besoin d'etre mise a jours a PLAYER_ENTERING_WORLD
 local function setAddonDefault(self,elapsed)
 
-	
+
 	--Getting player powertype information for Druid	
 	if playerClass == "Druid" then	
 		--local MoonkinisKnown = IsSpellKnown(197625) -- check if player know Moonkin Form
@@ -135,6 +135,20 @@ local function setAddonDefault(self,elapsed)
 		secondaryPowerColorG = powerIndex2[3]
 		secondaryPowerColorB = powerIndex2[4]	
 		
+	elseif playerClass == "Mage" and playerCurrentSpec == 3 then
+		--print ("this is a Death Knight")
+		playerMainPowerType = 0
+		local powerIndex = powerColor[7]			
+		mainPowerColorR = powerIndex[2]
+		mainPowerColorG = powerIndex[3]
+		mainPowerColorB = powerIndex[4]	
+			
+		--secondaryPowerType = 5
+		--local powerIndex2 = powerColor[6]			
+		--secondaryPowerColorR = powerIndex2[2]
+		--secondaryPowerColorG = powerIndex2[3]
+		--secondaryPowerColorB = powerIndex2[4]	
+		
 		
 			
 	else
@@ -192,6 +206,9 @@ end
 local addonDefaultFrame = CreateFrame("frame")
 addonDefaultFrame:RegisterEvent("PLAYER_ENTERING_WORLD"); 
 addonDefaultFrame:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
+addonDefaultFrame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
+addonDefaultFrame:RegisterEvent("CHARACTER_POINTS_CHANGED");
+addonDefaultFrame:RegisterEvent("ADDON_LOADED");
 --addonDefaultFrame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED"); --je sais pas pourquois mon event ne trigger pas.
 addonDefaultFrame:SetScript("OnEvent", setAddonDefault);
 
@@ -444,6 +461,7 @@ tStatusbar:SetScript("OnUpdate",function(self)
 		unstableAffliction5Frame:Show()--warlock ui
 		rakeFrame:Show()--druid ui
 		ripeFrame:Show()--druid ui
+		frostFrame:Show()--Mage ui
 	else
 		corruptionFrame:Hide() --warlock ui
 		agonyFrame:Hide() --warlock ui
@@ -457,6 +475,7 @@ tStatusbar:SetScript("OnUpdate",function(self)
 		unstableAffliction5Frame:Hide()--warlock ui
 		rakeFrame:Hide()--druid ui
 		ripeFrame:Hide()--druid ui
+		frostFrame:Hide()--Mage ui
 		tStatusbarBg:Hide()
 		tStatusbar.text:Hide()
 	end
@@ -770,7 +789,7 @@ ignorePainBar:SetValue(0)
 ignorePainBar:SetStatusBarColor(1,0.8,0.16, 1)
 
 ----ignore Pain bar tick
-print (playerClass)
+--print (playerClass)
 if playerClass == "Warrior" then
 	ignorePainBar:SetScript("OnUpdate",function(self)
 		for i=1,40 do
@@ -838,6 +857,33 @@ for i=1,40 do
 	end
 end)
 
+--------------------------------------------------------------------------------------------------------------
+-- Mage  Spesific UI -- 
+--------------------------------------------------------------------------------------------------------------
+frostFrame = CreateFrame("Statusbar",nil,UIParent)
+frostFrame:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+local frostBar = frostFrame
+frostBar.unit = "target"
+frostBar:SetMinMaxValues(0,100)
+frostBar:SetPoint("CENTER",300,-220)
+frostBar:SetSize(200,15)
+frostBar:Show()
+frostBar:SetValue(100)
+frostBar:SetStatusBarColor(0.3,0.3,1, 1)
+frostBar:SetScript("OnUpdate",function(self)
+for i=1,40 do
+		local name, _, _, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff("target",i)
+		if name == "Chilled" and unitCaster == "player" then
+			
+			local frostTimer = expirationTime - GetTime()
+			self:SetValue(frostTimer/duration*100)
+		
+			break
+		else
+			self:SetValue(0)	
+	  end
+	end
+end)
 
 
 --[[
